@@ -1,0 +1,568 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #d1d1d1;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0e0e0e;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            
+        }
+
+        .icon-container {
+            position: relative;
+            cursor: pointer;
+            color: #ecf0f1;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .icon-container:hover .search-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart Box */
+        .cart-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .icon-container:hover .cart-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+       
+        
+        /* Added positioning for icon containers */
+        .icon-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* User hover box positioning */
+        #user-box {
+            position: absolute;
+            right: 0;
+            top: 40px; /* Distance from icon */
+            width: 200px;
+            background: #0e0e0e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .icon-container:hover #user-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart icon link */
+        .fa-shopping-cart {
+            transition: transform 0.3s;
+        }
+        .fa-shopping-cart:hover {
+            transform: scale(1.1);
+        }
+
+         
+        .signup-modal {
+           display: none; /* Hidden by default */
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+           z-index: 1000;
+           justify-content: center;
+           align-items: center;
+        }
+        .signup-modal:target{
+            display: flex;
+        }
+
+        .signup-content {
+           background-color: red;
+           padding: 30px;
+           border-radius: 8px;
+           box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+           width: 90%;
+           max-width: 400px;
+           position: relative;
+           margin: 20px;
+        }
+
+        .signup-content h2 {
+           text-align: center;
+           margin-bottom: 20px;
+           color: #333;
+        }
+
+        .signup-content form {
+           display: flex;
+           flex-direction: column;
+           gap: 15px;
+        }
+        i{
+            color: white;
+        }
+
+        .signup-content input {
+           padding: 12px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           font-size: 16px;
+           width: 100%;
+           box-sizing: border-box;
+        }
+
+        .signup-content button {
+           padding: 12px;
+           background-color: #007bff;
+           color: white;
+           border: none;
+           border-radius: 4px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: background-color 0.3s;
+        }
+
+        .signup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        .close-btn {
+           position: absolute;
+           right: 20px;
+           top: 15px;
+           font-size: 28px;
+           color: #666;
+           text-decoration: none;
+        }
+        .badge{
+            
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #e60000;
+            color: #fff;
+            font-size: 10px;
+            border-radius: 50%;
+            padding: 2px 4px;
+        }
+
+        .close-btn:hover {
+           color: #333;
+        }
+
+        /* Show modal when active */
+        .signup-modal.active {
+           display: flex;
+        }
+        main {
+            padding: 16px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .container .left, .container .right {
+            background-color: #2a2a2a;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .container .left {
+            flex: 1;
+        }
+        .container .right {
+            width: 100%;
+            max-width: 300px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3a3a3a;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        .item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .item .details {
+            flex: 1;
+            margin-left: 16px;
+        }
+        .item .details h2 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .item .details .price {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .item .details .price del{
+            color: #a1a1a1;
+            font-size: 14px;
+            font-weight:lighter;
+        }
+        .item .details .counter{
+            padding-top: 20px;
+        }
+
+        .item .details span{
+            color: red;;
+        }
+
+        .item .details button {
+            background-color: #3a3a3a;
+            color: #d1d1d1;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .item .trash {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .item .trash i {
+            color: #a1a1a1;
+            cursor: pointer;
+        }
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .summary .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .summary .checkout {
+            background-color: #e60000;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        footer {
+            background-color: #2a2a2a;
+            padding: 32px;
+            margin-top: 32px;
+        }
+        footer .footer-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        footer .footer-container .subscribe {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        footer .footer-container .subscribe input {
+            padding: 8px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            background-color: #3a3a3a;
+            color: #d1d1d1;
+        }
+        footer .footer-container .subscribe button {
+            background-color: #e60000;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        footer .footer-container .links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        footer .footer-container .links h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        footer .footer-container .links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        footer .footer-container .links ul li {
+            margin-bottom: 8px;
+        }
+        footer .footer-container .links ul li a {
+            color: #d1d1d1;
+            text-decoration: none;
+        }
+        footer .footer-container .links ul li a:hover {
+            text-decoration: underline;
+        }
+        footer .footer-container .social {
+            display: flex;
+            gap: 16px;
+        }
+        footer .footer-container .social a {
+            color: #a1a1a1;
+            text-decoration: none;
+        }
+        footer .footer-container .social a:hover {
+            color: #d1d1d1;
+        }
+        footer .footer-bottom {
+            text-align: center;
+            color: #a1a1a1;
+            margin-top: 32px;
+        }
+        @media (min-width: 1024px) {
+            .container {
+                flex-direction: row;
+                gap: 32px;
+            }
+            footer .footer-container {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            footer .footer-container .links {
+                flex-direction: row;
+                gap: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#">Tech-<span>Shop</span></a>
+        </div>
+        <div class="nav-icons">
+            <!-- Search -->
+            <div class="icon-container">
+                <a href="#"><i class="fas fa-search"></i></a>
+            <div class="search-box">
+                <input type="text" placeholder="Search for items..."></div>
+            </div>
+
+            <!-- Cart -->
+            <div class="icon-container">
+                <a href="#" class="cart-link"> <!-- Changed to actual cart page link -->
+                    <i class="fas fa-shopping-cart"><span class="badge">4</span>
+                    </i>
+                </a>
+            </div>
+
+            <!-- User -->
+            <div class="icon-container">
+                <a href="#user-box" class="user-icon"><i class="fas fa-user"></i></a>
+                <div id="user-box" class="hover-box">
+                    <h2>Hello!</h2>
+                    <p>Access your account to manage your orders.</p>
+                    <a href="#signup-modal" class="login-btn">Login</a>
+                    <p class="signup-prompt">Please login or <a href="#signup-modal">create account</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signup-modal" class="signup-modal">
+            <div class="signup-content">
+                <a href="#" class="close-btn">&times;</a>
+                <h2>Create Account</h2>
+                <form>
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="left">
+                <div class="item">
+                    <img src="images/products/jbl660nc-1.png" alt="JBL Live 660NC Wireless Over-Ear NC Headphones">
+                    <div class="details">
+                        <h2>JBL Live 660NC Wireless Over-Ear NC Headphones</h2>
+                        <div class="price">₹9,999 <del>₹14,999</del></div>
+                        
+                        <div class="counter">
+                            <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+                    </div>
+                    <div class="trash">
+                        <div><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="images/products/boat518-1.png">
+                    <div class="details">
+                        <h2>boAt Rockerz 518 On-Ear Wireless Headphones</h2>
+                        <div class="price">₹1,299 <del>₹3,990</del></div>
+                        
+                        <div class="counter">
+                            <button>-</button>
+                        <span>2</span>
+                        <button>+</button>
+                    </div>
+                    </div>
+                    <div class="trash">
+                        <div><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="images/products/boat131-1.png">
+                    <div class="details">
+                        <h2>boAt Airdopes 131 Wireless In-Ear</h2>
+                        <div class="price">₹1,099 <del>₹2,990</del></div>
+                        <div class="counter">
+                            <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+                       
+                    </div>
+                    <div class="trash">
+                        <div><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <h2>Order Summary (4 items)</h2>
+                <div class="summary">
+                    <div class="item">
+                        <span>Original Price</span>
+                        <span>₹21,979</span>
+                    </div>
+                    <div class="item">
+                        <span>Discount</span>
+                        <span style="color: #00e600;">-₹9,582</span>
+                    </div>
+                    <div class="item">
+                        <span>Delivery</span>
+                        <span style="color: #00e600;">Free</span>
+                    </div>
+                    <div class="total">
+                        <span>Total Price</span>
+                        <span>₹12,397</span>
+                    </div>
+                    <button class="checkout">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer style="background-color: #0e0e0e; padding: 50px 5%; text-align: center; border-top: 1px solid #333;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-bottom: 30px;">
+            <div style="flex: 1; min-width: 200px; text-align: left;">
+                <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Tech-Shop</h3>
+                <p style="color: #bdc3c7; margin-top: 15px;">Your one-stop shop for all tech gadgets and accessories.</p>
+                <label for="email" ></label>
+                <input type="email" id="email" name="email" placeholder="E-mail Address"  style="display: flex; flex-direction: row; ">
+                <button style=" font-size: 18px;   color: white; background-color: red; margin-top: 20px; ">Subscribe</button>
+            </div>
+            <div style="flex: 1; min-width: 200px; text-align: left;">
+                <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Quick Links</h3>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Products</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Contact</a></li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 200px; text-align: left;">
+                <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Support</h3>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">FAQs</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Shipping</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Returns</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div style="color: #777; border-top: 1px solid #333; text-align: left; width: 100%;">
+            &copy; 2025 TechShop. All Rights Reserved.
+    
+        <div style="display: flex; flex-direction: row; gap: 15px;  justify-content: right;  ">
+                    <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-youtube"></i></a>
+        </div>
+        </div>
+        </div>
+        </div>
+        
+    </footer>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
