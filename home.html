@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0e0e0e; 
+            color: white;
+            margin: 0;
+        }
+
+        header {
+            background-color: #0e0e0e;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            
+        }
+
+        .icon-container {
+            position: relative;
+            cursor: pointer;
+            color: #ecf0f1;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .icon-container:hover .search-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart Box */
+        .cart-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .icon-container:hover .cart-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+       
+        
+        /* Added positioning for icon containers */
+        .icon-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* User hover box positioning */
+        #user-box {
+            position: absolute;
+            right: 0;
+            top: 40px; /* Distance from icon */
+            width: 200px;
+            background: #0e0e0e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .icon-container:hover #user-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart icon link */
+        .fa-shopping-cart {
+            transition: transform 0.3s;
+        }
+        .fa-shopping-cart:hover {
+            transform: scale(1.1);
+        }
+
+         
+        .signup-modal {
+           display: none; /* Hidden by default */
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+           z-index: 1000;
+           justify-content: center;
+           align-items: center;
+        }
+        .signup-modal:target{
+            display: flex;
+        }
+
+        .signup-content {
+           background-color: red;
+           padding: 30px;
+           border-radius: 8px;
+           box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+           width: 90%;
+           max-width: 400px;
+           position: relative;
+           margin: 20px;
+        }
+
+        .signup-content h2 {
+           text-align: center;
+           margin-bottom: 20px;
+           color: #333;
+        }
+
+        .signup-content form {
+           display: flex;
+           flex-direction: column;
+           gap: 15px;
+        }
+        i{
+            color: white;
+        }
+
+        .signup-content input {
+           padding: 12px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           font-size: 16px;
+           width: 100%;
+           box-sizing: border-box;
+        }
+
+        .signup-content button {
+           padding: 12px;
+           background-color: #007bff;
+           color: white;
+           border: none;
+           border-radius: 4px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: background-color 0.3s;
+        }
+
+        .signup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        .close-btn {
+           position: absolute;
+           right: 20px;
+           top: 15px;
+           font-size: 28px;
+           color: #666;
+           text-decoration: none;
+        }
+
+        .close-btn:hover {
+           color: #333;
+        }
+
+        /* Show modal when active */
+        .signup-modal.active {
+           display: flex;
+        }
+        .categories h2 {
+         /* Add base styles that are currently inline */
+           padding: 8px 20px;
+           border-radius: 20px;
+           cursor: pointer;
+           font-size: 16px;
+           font-weight: normal;
+           margin: 5px;
+           transition: all 0.3s;
+           border: 1px solid #444;
+           background-color: transparent;
+           color: white;
+        }
+
+        .categories h2:hover {
+           color: white !important;
+           background-color: red !important;
+        }
+
+         /* Style for active "All" category */
+        .categories h2[style*="background-color: red"] {
+            border: 1px solid red !important;
+
+        }
+        
+        .product:hover {
+            transform: scale(1.03);
+    }
+        </style>
+   
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="#">Tech-<span>Shop</span></a>
+        </div>
+        <div class="nav-icons">
+            <!-- Search -->
+            <div class="icon-container">
+                <a href="#"><i class="fas fa-search"></i></a>
+            <div class="search-box">
+                <input type="text" placeholder="Search for items..."></div>
+            </div>
+
+            <!-- Cart -->
+            <div class="icon-container">
+                <a href="cart.html" class="cart-link"> <!-- Changed to actual cart page link -->
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+            </div>
+
+            <!-- User -->
+            <div class="icon-container">
+                <a href="#user-box" class="user-icon"><i class="fas fa-user"></i></a>
+                <div id="user-box" class="hover-box">
+                    <h2>Hello!</h2>
+                    <p>Access your account to manage your orders.</p>
+                    <a href="#signup-modal" class="login-btn">Login</a>
+                    <p class="signup-prompt">Please login or <a href="#signup-modal">create account</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signup-modal" class="signup-modal">
+            <div class="signup-content">
+                <a href="#" class="close-btn">&times;</a>
+                <h2>Create Account</h2>
+                <form>
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    
+    </header>
+    <!-- Hero Section -->
+    <section class="hero" style="display: flex; justify-content: space-between; align-items: center; padding: 50px 10%; position: relative;">
+        <h1 class="background-container" style="position: absolute; left: 5%; font-size: 200px; font-weight: bold; color: rgba(255, 255, 255, 0.05); z-index: -1; text-transform: uppercase; margin-bottom: 300px;">In Ear</h1>
+        <div class="hero-content" style="max-width: 500px; z-index: 1;">
+            <h4 style="color: #a8a8a8; font-size: 24px; margin-bottom: 10px;">boAt Airdopes 131</h4>
+            <h1 style="font-size: 36px; margin: 10px 0; color: white; line-height: 1.2;">Featherweight For Comfort All-Day.</h1>
+            <p class="price" style="font-size: 24px; color: white; display: flex; align-items: center;">
+                ₹1,099 <span class="old-price" style="text-decoration: line-through; color: gray; font-size: 18px; margin-left: 10px;">₹2,999</span>
+            </p>
+            <button class="shop-btn" style="background: red; color: white; padding: 12px 25px; border: none; font-size: 16px; cursor: pointer; margin-top: 20px; border-radius: 5px; transition: background-color 0.3s;">Shop Now</button>
+        </div>
+        <div class="hero-image">
+            <img src="/images/products/boat131-3.png" alt="boAt Airdopes 131" style="max-width: 500px; width: 100%; ">
+        </div>
+    </section>
+    <section style="background-color: #1a1a1a; ">
+        <h1 style="margin-top: 30px; text-align: center;">Featured Products</h1>
+    
+        <div style="display: flex; justify-items:center; align-items: center; padding: 20px; border-radius: 50px; ">
+    
+            <!-- Product 1 -->
+            <div style="background-color: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center; width: 180px;">
+                <h4 style="font-size: 10px;font-weight: lighter; margin: 10px 0;">SONY EX14AP 2</h4>
+                <img src="/images/products/sony-ex14ap-2.png" alt="SONY EX14AP 2" style="width: 100%; border-radius: 10px;">
+                <p style="font-size: 10px; font-weight: lighter;">₹1,074 <span style="text-decoration: line-through; color: red; font-size: 14px;">₹3,999</span></p>
+            </div>
+    
+            <!-- Product 2 -->
+            <div style="background-color: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center; width: 200px;">
+                <h4 style="font-size: 18px;font-weight: lighter; margin: 10px 0;">SONY 1000XM4 2</h4>
+                <img src="/images/products/sony1000xm4-2.png" alt="SONY 1000XM4 2" style="width: 100%; border-radius: 10px;">
+                <p style="font-size: 18px; font-weight: lighter;">₹1,299 <span style="text-decoration: line-through; color: red; font-size: 14px;">₹3,990</span></p>
+            </div>
+    
+            <!-- Center Product (Larger) -->
+            <div style="background-color: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center; width: 250px;">
+                <h4 style="font-size: 25px; font-weight: lighter;  margin: 10px 0;">SONY XB400 1</h4>
+                <img src="/images/products/sonyXb400-1.png" alt="SONY XB400 1" style="width: 100%; border-radius: 10px;">
+                <p style="font-size: 25px; font-weight: lighter">₹5,999 <span style="text-decoration: line-through; color: red; font-size: 16px;">₹7,999</span></p>
+            </div>
+    
+            <!-- Product 4 -->
+            <div style="background-color: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center; width: 200px;">
+                <h4 style="font-size: 18px; font-weight: lighter; margin: 10px 0;">JBL 200BT 3</h4>
+                <img src="/images/products/jbl200bt-3.png" alt="JBL 200BT 3" style="width: 100%; border-radius: 10px;">
+                <p style="font-size: 18px; font-weight: lighter;">₹899 <span style="text-decoration: line-through; color: red; font-size: 14px;">₹2,990</span></p>
+            </div>
+    
+            <!-- Product 5 -->
+            <div style="background-color: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center; width: 190px;">
+                <h4 style="font-size: 10px; font-weight: lighter; margin: 10px 0;">JBL 660NC 3</h4>
+                <img src="/images/products/jbl200bt-3.png" alt="JBL 660NC 3" style="width: 100%; border-radius: 10px;">
+                <p style="font-size: 10px; font-weight: lighter;">₹999 <span style="text-decoration: line-through; color: red; font-size: 14px;">₹1,599</span></p>
+            </div>
+        </div>
+    </section>
+    
+   <!-- Top Products Section -->
+<section class="top-products" style="background-color: #1a1a1a; padding: 50px 5%; text-align: center;">
+    <h2 class="section-title" style="font-size: 32px; color: white; margin-bottom: 30px; position: relative; display: inline-block;">
+        Top Products</h2>
+    
+    <!-- Categories -->
+    <div class="categories" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+        <h2 style="padding: 8px 20px; background-color: red; color: white; border-radius: 20px; cursor: pointer; font-size: 16px; font-weight: normal; margin: 5px;">All</h2>
+        <h2 style="padding: 8px 20px;  border: 1px solid #444; border-radius: 20px; cursor: pointer; font-size: 16px; font-weight: normal; margin: 5px; transition: all 0.3s;">Headphones</h2>
+        <h2 style="padding: 8px 20px; border: 1px solid #444; border-radius: 20px; cursor: pointer; font-size: 16px; font-weight: normal; margin: 5px; transition: all 0.3s;">Earbuds</h2>
+        <h2 style="padding: 8px 20px;  border: 1px solid #444; border-radius: 20px; cursor: pointer; font-size: 16px; font-weight: normal; margin: 5px; transition: all 0.3s;">Earphones</h2>
+        <h2 style="padding: 8px 20px; border: 1px solid #444; border-radius: 20px; cursor: pointer; font-size: 16px; font-weight: normal; margin: 5px; transition: all 0.3s;">Neckbands</h2>
+    </div>
+    
+    <!-- Product Grid - 3 rows of 4 products each -->
+    <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; justify-items: center;">
+        <!-- Product 1 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <a href="product.html"></a>
+            <img src="/images/products/boat131-1.png" alt="Product 1" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt Airdopes 131</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wireless In-Ear Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,499</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">50% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="/images/products/jbl100-2.png" alt="Product 2" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Jbl 100 buds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wireless Bluetooth Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹2,299</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹3,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">42% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/jbl760nc-1.png" alt="Product 3" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Jbl 760nc Headphones</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Noise Cancelling Wireless</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,799</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">40% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/boat255r-1.png" alt="Product 4" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                  
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 255 Earphones</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wired in-ear with Mic</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹999</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹1,799</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">44% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/boat410-1.png" alt="Product 5" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 410 Headset</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Over-ear Wireless Headphones</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹2,499</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹3,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">38% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/sony-ex14ap-3.png" alt="Product 6" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Sony EX1AP Earphone</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wired in-ear with Mic</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,299</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,299</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">43% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 7 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/sonyXb910n-1.png" alt="Product 7" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">SonyXb910n Headphone</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Noise Cancelling Wireless</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹3,499</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹4,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">30% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 8 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/jbl100-1.png" alt="Product 8" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Jbl 100 Earbuds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">True Wireless Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,599</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,499</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">36% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 9 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/boat203-2.png" alt="Product 9" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 203 buds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wireless Bluetooth Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹2,799</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹3,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">30% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 10 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/boat518-1.png" alt="Product 10" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 518 Headset</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Over-ear Wireless Headphones</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,199</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹1,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">40% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 11 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="images/products/boat381-2.png" alt="Product 11" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                    <span style="color: gold; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 381 buds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">True Wireless Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,899</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">37% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Browse All Products Card -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px dashed #444; width: 100%; max-width: 280px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <p style="color: white; font-size: 18px; text-align: center; margin: 0;">Browse All Products</p>
+        </div>
+    </div>
+</section>
+<!-- Advantages Section -->
+<section class="advantages" style="background-color: #1a1a1a; padding: 40px 0; display: flex; flex-direction: column;">
+    <h1 style="text-align: center; color: white; margin-bottom: 70px;">Our Advantages</h1>
+    <div class="advantage-items" style="display: flex;  align-items: center; gap: 20px; padding-left: 60px;">
+        
+        <div class="advantage-item" style=" display: flex;  align-items: center; max-width: 300px;">
+            <i class="fas fa-shipping-fast" style="font-size: 35px; color: red; margin-right: 15px; "></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Express Delivery</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">Get your products delivered within 24 hours</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-shield-alt" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Brand Warranty</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">All products come with manufacturer warranty</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-tag" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Exciting Deals</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">Regular discounts and special offers</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-lock" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Secure Payments</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">100% secure and encrypted payment methods</p>
+            </div>
+        </div>  
+
+    </div>
+</section>
+ <!--------Footer Section------->
+ <footer style="background-color: #0e0e0e; padding: 50px 5%; text-align: center; border-top: 1px solid #333;">
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-bottom: 30px;">
+        <div style="flex: 1; min-width: 200px; text-align: left;">
+            <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Tech-Shop</h3>
+            <p style="color: #bdc3c7; margin-top: 15px;">Your one-stop shop for all tech gadgets and accessories.</p>
+            <label for="email" ></label>
+            <input type="email" id="email" name="email" placeholder="E-mail Address"  style="display: flex; flex-direction: row; ">
+            <button style=" font-size: 18px;   color: white; background-color: red; margin-top: 20px; ">Subscribe</button>
+        </div>
+        <div style="flex: 1; min-width: 200px; text-align: left;">
+            <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Quick Links</h3>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Home</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Products</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">About Us</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Contact</a></li>
+            </ul>
+        </div>
+        <div style="flex: 1; min-width: 200px; text-align: left;">
+            <h3 style="color: white; margin-bottom: 20px; font-size: 18px;">Support</h3>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">FAQs</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Shipping</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Returns</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div style="color: #777; border-top: 1px solid #333; text-align: left; width: 100%;">
+        &copy; 2025 TechShop. All Rights Reserved.
+
+    <div style="display: flex; flex-direction: row; gap: 15px;  justify-content: right;  ">
+                <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-youtube"></i></a>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+</footer>
+</body>
+</html>
