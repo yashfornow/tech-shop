@@ -3,256 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech-Shop</title>
+    <title>Product Gallery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-         header {
-            background-color: #0e0e0e;
-            padding: 15px 5%;
+    
+        .thumbnail-selector {
+            display: none;
+        }
+        
+    
+        .gallery-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 2000px;
+            margin: 0 auto;
+            gap: 30px;
+            padding: 20px;
         }
+        
 
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .logo a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .nav-icons {
+        .thumbnail-column {
             display: flex;
-            gap: 25px;
-            align-items: center;
-            
+            flex-direction: column;
+            gap: 15px;
+            width: 80px;
         }
-
-        .icon-container {
+        
+        
+        .main-image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            border-radius: 10px;
+            height: 700px;
+            overflow: hidden;
             position: relative;
-            cursor: pointer;
-            color: #ecf0f1;
         }
-
-        /* Search Box */
-        .search-box {
+        
+        
+        .main-image {
+            display: none;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
             position: absolute;
-            right: 0;
-            top: 40px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
-        .icon-container:hover .search-box {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Cart Box */
-        .cart-box {
-            position: absolute;
-            right: 0;
-            top: 40px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            color: #2c3e50;
-        }
-
-        .icon-container:hover .cart-box {
-            opacity: 1;
-            visibility: visible;
-        }
-
        
         
-        /* Added positioning for icon containers */
-        .icon-container {
-            position: relative;
-            display: inline-block;
+        .thumbnail-selector:checked + label {
+            border-color: red;
         }
-
-        /* User hover box positioning */
-        #user-box {
-            position: absolute;
-            right: 0;
-            top: 40px; /* Distance from icon */
-            width: 200px;
-            background: #0e0e0e;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            padding: 15px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
+        
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid #444;
+            background-color: black;
+            padding: 5px;
+            display: block;
+            transition: border-color 0.2s ease;
         }
-
-        .icon-container:hover #user-box {
-            opacity: 1;
-            visibility: visible;
+        
+        .thumbnail:hover {
+            border-color: #777;
         }
-
-        /* Cart icon link */
-        .fa-shopping-cart {
-            transition: transform 0.3s;
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
-        .fa-shopping-cart:hover {
-            transform: scale(1.1);
+    
+        .main-image:first-child {
+            display: block;
         }
-
-         
-        .signup-modal {
-           display: none; /* Hidden by default */
-           position: fixed;
-           top: 0;
-           left: 0;
-           width: 100%;
-           height: 100%;
-           background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-           z-index: 1000;
-           justify-content: center;
-           align-items: center;
-        }
-        .signup-modal:target{
-            display: flex;
-        }
-
-        .signup-content {
-           background-color: red;
-           padding: 30px;
-           border-radius: 8px;
-           box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-           width: 90%;
-           max-width: 400px;
-           position: relative;
-           margin: 20px;
-        }
-
-        .signup-content h2 {
-           text-align: center;
-           margin-bottom: 20px;
-           color: #333;
-        }
-
-        .signup-content form {
-           display: flex;
-           flex-direction: column;
-           gap: 15px;
-        }
-
-        i{
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0e0e0e;
             color: white;
+            margin: 0;
         }
-
-        .signup-content input {
-           padding: 12px;
-           border: 1px solid #ddd;
-           border-radius: 4px;
-           font-size: 16px;
-           width: 100%;
-           box-sizing: border-box;
-        }
-
-        .signup-content button {
-           padding: 12px;
-           background-color: #007bff;
-           color: white;
-           border: none;
-           border-radius: 4px;
-           font-size: 16px;
-           cursor: pointer;
-           transition: background-color 0.3s;
-        }
-
-        .signup-content button:hover {
-            background-color: #0056b3;
-        }
-
-        .close-btn {
-           position: absolute;
-           right: 20px;
-           top: 15px;
-           font-size: 28px;
-           color: #666;
-           text-decoration: none;
-        }
-
-        .close-btn:hover {
-           color: #333;
-        }
-
-        /* Show modal when active */
-        .signup-modal.active {
-           display: flex;
-        }
-
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="#">Tech-<span>Shop</span></a>
+    <div class="gallery-container">
+        <!-- Thumbnail Column -->
+        <div class="thumbnail-column">
+            <!-- Thumbnail 1 -->
+            <input type="radio" name="thumbnail-select" id="thumb1" class="thumbnail-selector" checked>
+            <label for="thumb1" class="thumbnail">
+                <img src="/Assets/products/boat131-1.png" alt="Thumbnail 1">
+            </label>
+            
+            <!-- Thumbnail 2 -->
+            <input type="radio" name="thumbnail-select" id="thumb2" class="thumbnail-selector">
+            <label for="thumb2" class="thumbnail">
+                <img src="/Assets/products/boat131-2.png" alt="Thumbnail 2">
+            </label>
+            
+            <!-- Thumbnail 3 -->
+            <input type="radio" name="thumbnail-select" id="thumb3" class="thumbnail-selector">
+            <label for="thumb3" class="thumbnail">
+                <img src="/Assets/products/boat131-3.png" alt="Thumbnail 3">
+            </label>
+            
+            <!-- Thumbnail 4 -->
+            <input type="radio" name="thumbnail-select" id="thumb4" class="thumbnail-selector">
+            <label for="thumb4" class="thumbnail">
+                <img src="/Assets/products/boat131-4.png" alt="Thumbnail 4">
+            </label>
         </div>
-        <div class="nav-icons">
-            <!-- Search -->
-            <div class="icon-container">
-                <a href="#"><i class="fas fa-search"></i></a>
-            <div class="search-box">
-                <input type="text" placeholder="Search for items..."></div>
+        
+        
+        <div class="main-image-container">
+            <!-- Main Images - Only one will be visible at a time -->
+            <img src="/Assets/products/boat131-1.png" id="mainImage1" class="main-image" alt="Main Product Image 1">
+            <img src="/Assets/products/boat131-2.png" id="mainImage2" class="main-image" alt="Main Product Image 2">
+            <img src="/Assets/products/boat131-3.png" id="mainImage3" class="main-image" alt="Main Product Image 3">
+            <img src="/Assets/products/boat131-4.png" id="mainImage4" class="main-image" alt="Main Product Image 4">
+        </div>
+
+
+        <div style="width: 40%; padding: 20px; background-color: #1a1a1a; border-radius: 10px;">
+            <h1 style="font-size: 28px; margin-bottom: 15px;">boAt Airdopes 131</h1>
+            <p> boat Wireless Eardopes </p>
+            <div style="color: red; font-size: 20px; margin-bottom: 15px;">
+                ★★★★★ <span style="color: #777; font-size: 16px;">| 1285 Reviews</span>
             </div>
 
-            <!-- Cart -->
-            <div class="icon-container">
-                <a href="cart.html" class="cart-link"> <!-- Changed to actual cart page link -->
-                    <i class="fas fa-shopping-cart"></i>
-                </a>
+            <div style="border : 1px solid #333;"> 
             </div>
 
-            <!-- User -->
-            <div class="icon-container">
-                <a href="#user-box" class="user-icon"><i class="fas fa-user"></i></a>
-                <div id="user-box" class="hover-box">
-                    <h2>Hello!</h2>
-                    <p>Access your account to manage your orders.</p>
-                    <a href="#signup-modal" class="login-btn">Login</a>
-                    <p class="signup-prompt">Please login or <a href="#signup-modal">create account</a></p>
+            <div style="font-size: 25px ;  color: red; margin-bottom: 20px;">
+                ₹1,099 
+                <span style="text-decoration: line-through; color: #777; font-size: 18px; margin-left: 10px;">₹2,999</span>
+               
+                <div> 
+                    <span style="color:#4CAF50; font-size: 16px; margin-left: 10px;">you Save:₹1999(20%)</span>
+                </div>
+
+            </div>
+            
+            <p style="color: #aaa; line-height: 1.6; margin-bottom: 25px; font-size: 16px;">
+              (inclusive of all taxes)
+            </p>
+
+            <div style="border : 1px solid #333;"> 
+            </div>
+          <!---------------------------------------->
+         <h1 style="font-size: 20 px; margin-bottom: 15px;">Offer and discounts</h1>
+         <div style="max-width: 300px;">
+            <input type="text" placeholder="No cost EMI on credit card" 
+                style="width: 80%; padding: 10px; border: 1px solid white; background: transparent; color: white; margin-bottom: 10px;">
+               
+                <input type="text" placeholder="Pay later & available cashback" 
+                style="width: 80%; padding: 10px; border: 1px solid white; background: transparent; color: white; margin-bottom: 10px;">    
+            
+        </div>
+          <!-------------------------------------------->
+
+          <div style="border : 1px solid #333;"> 
+        </div>
+
+            <button style="background-color: red; color: white; padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 20px; font-weight: bold;">
+                <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Specifications Section -->
+    <div style="margin-top: 30px;">
+        <div style="display: flex; justify-content: center; gap: 180px;">
+            <button style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Specifications</button>
+            <button style="background-color: transparent; color: white; border: none; font-weight: bold; cursor: pointer;">Overview</button>
+            <button style="background-color: transparent; color: white; border: none; font-weight: bold; cursor: pointer;">Reviews</button>
+        </div>
+
+        <div style="margin-top: 20px; padding-left: 50px; display: flex; justify-content: left;">
+            <table style="border-collapse: collapse; width: 50%; text-align: left;">
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Brand</td>
+                    <td style="padding: 8px;">JBL</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Model</td>
+                    <td style="padding: 8px;">JBL Live 660NC</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Generic Name</td>
+                    <td style="padding: 8px;">Headphones</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Headphone Type</td>
+                    <td style="padding: 8px;">Over Ear</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Connectivity</td>
+                    <td style="padding: 8px;">Wireless</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold;">Microphone</td>
+                    <td style="padding: 8px;">Yes</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+  
+    <!-- Advantages Section -->
+<section class="advantages" style="background-color: #1a1a1a; padding: 40px 0; display: flex; flex-direction: column;">
+    <h1 style="text-align: center; color: white; margin-bottom: 70px;">Our Advantages</h1>
+    <div class="advantage-items" style="display: flex;  align-items: center; gap: 200px; padding-left: 60px;">
+        
+        <div class="advantage-item" style=" display: flex;  align-items: center; max-width: 500px;">
+            <i class="fas fa-shipping-fast" style="font-size: 35px; color: red; margin-right: 15px; "></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Express Delivery</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">Get your products delivered within 24 hours</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-shield-alt" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Brand Warranty</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">All products come with manufacturer warranty</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-tag" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Exciting Deals</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">Regular discounts and special offers</p>
+            </div>
+        </div>
+
+        <div class="advantage-item" style="display: flex; align-items: center; max-width: 500px;">
+            <i class="fas fa-lock" style="font-size: 40px; color: red; margin-right: 15px;"></i>
+            <div>
+                <h5 style="font-size: 18px; color: white; margin: 0;">Secure Payments</h5>
+                <p style="font-size: 14px; color: #aaa; margin: 5px 0 0 0;">100% secure and encrypted payment methods</p>
+            </div>
+        </div>  
+
+    </div>
+</section>
+<!-- Top Products Section -->
+<section class="top-products" style="background-color: #1a1a1a; padding: 50px 5%; text-align: center;">
+    <h2 class="section-title" style="font-size: 32px; color: white; margin-bottom: 30px; position: relative; display: inline-block;">
+         Related Products</h2>
+    
+    
+    
+    <!-- Product Grid - 3 rows of 4 products each -->
+    <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 200px; justify-items: center;">
+        <!-- Product 1 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="/Assets/products/boat131-2.png" alt="Product 1" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt Earbuds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wireless In-Ear Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,499</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">50% off</span>
                 </div>
             </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
         </div>
+        
+        <!-- Product 2 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="/Assets/products/jbl100-1.png" alt="Product 2" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Jbl 100 buds</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wireless Bluetooth Earbuds</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹2,299</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹3,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">42% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="/Assets/products/jbl760nc-3.png" alt="Product 3" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                   
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">Jbl 760nc Headphones</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Noise Cancelling Wireless</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹1,799</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹2,999</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">40% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="product" style="background-color: #2a2a2a; border-radius: 8px; padding: 15px; transition: transform 0.3s; border: 1px solid #444; width: 100%; max-width: 280px; box-sizing: border-box;">
+            <img src="/Assets/products/boat255r-2.png" alt="Product 4" style="width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; background: white;">
+            <div style="text-align: left; margin-bottom: 8px;">
+                <div style="display: flex; gap: 2px; margin-bottom: 5px;">
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                    <span style="color: red; font-size: 16px;">★</span>
+                  
+                </div>
+                <h3 style="color: white; font-size: 16px; margin: 5px 0; font-weight: 500;">boAt 255 Earphones</h3>
+                <p style="color: #aaa; font-size: 14px; margin: 5px 0;">Wired in-ear with Mic</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                    <span style="color: white; font-weight: bold; font-size: 18px;">₹999</span>
+                    <span style="color: #777; text-decoration: line-through; font-size: 14px;">₹1,799</span>
+                    <span style="color: #4CAF50; font-size: 13px; font-weight: 500;">44% off</span>
+                </div>
+            </div>
+            <button style="width: 100%; color: white; background-color: red; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px;">Add to Cart</button>
+        </div>
+</section>
+    <!--------Footer Section------->
+<div style="background-color: black; padding: 30px; color: white;">
 
-        <!-- Signup Modal -->
-        <div id="signup-modal" class="signup-modal">
-            <div class="signup-content">
-                <a href="#" class="close-btn">&times;</a>
-                <h2>Create Account</h2>
-                <form>
-                    <input type="text" placeholder="Full Name" required>
-                    <input type="email" placeholder="Email Address" required>
-                    <input type="password" placeholder="Password" required>
-                    <input type="password" placeholder="Confirm Password" required>
-                    <button type="submit">Sign Up</button>
-                </form>
+    <!-- Tech-Shop Section -->
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+
+        <!-- Tech-Shop Info & Subscription -->
+        <div style="flex: 1; min-width: 250px; margin-bottom: 20px;">
+            <h3 style="color: white; font-size: 20px; margin-bottom: 10px;">Tech-Shop</h3>
+            <p style="color: #bdc3c7; font-size: 14px; margin-bottom: 15px;">
+                Subscribe to our Email alerts to receive early discount offers, and new products info.
+            </p>
+
+            <div style="max-width: 300px;">
+                <input type="email" placeholder="Email Address*" 
+                    style="width: 100%; padding: 10px; border: 1px solid white; background: transparent; color: white; margin-bottom: 10px;">
+                <button style="width: 100%; padding: 10px; background-color: red; color: white; border: none; cursor: pointer; font-size: 16px;">
+                    Subscribe
+                </button>
             </div>
         </div>
-    </header>
-    
+
+        <!-- Help Section -->
+        <div style="flex: 1; min-width: 150px;">
+            <h3 style="color: white; font-size: 16px; margin-bottom: 10px;">Help</h3>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">FAQs</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Track Order</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Cancel Order</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Return Order</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Warranty Info</p>
+        </div>
+
+        <!-- Policies Section -->
+        <div style="flex: 1; min-width: 150px;">
+            <h3 style="color: white; font-size: 16px; margin-bottom: 10px;">Policies</h3>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Return Policy</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Security</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Sitemap</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Privacy Policy</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Terms & Conditions</p>
+        </div>
+
+        <!-- Company Section -->
+        <div style="flex: 1; min-width: 150px;">
+            <h3 style="color: white; font-size: 16px; margin-bottom: 10px;">Company</h3>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">About Us</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Contact Us</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Service Centres</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Careers</p>
+            <p style="color: #bdc3c7; font-size: 14px; margin: 5px 0;">Affiliates</p>
+        </div>
+        
+    </div>
+
+    <!-- Footer -->
+    <div style="color: #777; border-top: 1px solid #333; text-align: left; width: 100%;">
+        2025 | All Rights Reserved ©.
+
+   <div style="display: flex; flex-direction: row; gap: 20px;  justify-content: right;  ">
+               <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-facebook-f"></i></a>
+               <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-twitter"></i></a>
+               <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-instagram"></i></a>
+               <a href="#" style="color: #bdc3c7; font-size: 20px; transition: color 0.3s;"><i class="fab fa-youtube"></i></a>
+   </div>
+        </div>
+   
+    </footer>
+
 </body>
 </html>
