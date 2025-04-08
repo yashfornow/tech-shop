@@ -8,6 +8,210 @@
     
     <style>
     
+    body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0e0e0e; 
+            color: white;
+            margin: 0;
+        }
+
+        header {
+            background-color: #0e0e0e;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            
+        }
+
+        .icon-container {
+            position: relative;
+            cursor: pointer;
+            color: #ecf0f1;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .icon-container:hover .search-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart Box */
+        .cart-box {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .icon-container:hover .cart-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+       
+        
+        /* Added positioning for icon containers */
+        .icon-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* User hover box positioning */
+        #user-box {
+            position: absolute;
+            right: 0;
+            top: 40px; /* Distance from icon */
+            width: 200px;
+            background: #0e0e0e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .icon-container:hover #user-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Cart icon link */
+        .fa-shopping-cart {
+            transition: transform 0.3s;
+        }
+        .fa-shopping-cart:hover {
+            transform: scale(1.1);
+        }
+
+         
+        .signup-modal {
+           display: none; /* Hidden by default */
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+           z-index: 1000;
+           justify-content: center;
+           align-items: center;
+        }
+        .signup-modal:target{
+            display: flex;
+        }
+
+        .signup-content {
+           background-color: red;
+           padding: 30px;
+           border-radius: 8px;
+           box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+           width: 90%;
+           max-width: 400px;
+           position: relative;
+           margin: 20px;
+        }
+
+        .signup-content h2 {
+           text-align: center;
+           margin-bottom: 20px;
+           color: #333;
+        }
+
+        .signup-content form {
+           display: flex;
+           flex-direction: column;
+           gap: 15px;
+        }
+        i{
+            color: white;
+        }
+
+        .signup-content input {
+           padding: 12px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           font-size: 16px;
+           width: 100%;
+           box-sizing: border-box;
+        }
+
+        .signup-content button {
+           padding: 12px;
+           background-color: #007bff;
+           color: white;
+           border: none;
+           border-radius: 4px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: background-color 0.3s;
+        }
+
+        .signup-content button:hover {
+            background-color: #0056b3;
+        }
+
+        .close-btn {
+           position: absolute;
+           right: 20px;
+           top: 15px;
+           font-size: 28px;
+           color: #666;
+           text-decoration: none;
+        }
+
+        .close-btn:hover {
+           color: #333;
+        }
+
+        /* Show modal when active */
+        .signup-modal.active {
+           display: flex;
+        }
+
         .thumbnail-selector {
             display: none;
         }
@@ -85,15 +289,56 @@
         .main-image:first-child {
             display: block;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0e0e0e;
-            color: white;
-            margin: 0;
-        }
+        
     </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <a href="#">Tech-<span>Shop</span></a>
+        </div>
+        <div class="nav-icons">
+            <!-- Search -->
+            <div class="icon-container">
+                <a href="#"><i class="fas fa-search"></i></a>
+            <div class="search-box">
+                <input type="text" placeholder="Search for items..."></div>
+            </div>
+
+            <!-- Cart -->
+            <div class="icon-container">
+                <a href="cart.html" class="cart-link"> <!-- Changed to actual cart page link -->
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+            </div>
+
+            <!-- User -->
+            <div class="icon-container">
+                <a href="#user-box" class="user-icon"><i class="fas fa-user"></i></a>
+                <div id="user-box" class="hover-box">
+                    <h2>Hello!</h2>
+                    <p>Access your account to manage your orders.</p>
+                    <a href="#signup-modal" class="login-btn">Login</a>
+                    <p class="signup-prompt">Please login or <a href="#signup-modal">create account</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signup-modal" class="signup-modal">
+            <div class="signup-content">
+                <a href="#" class="close-btn">&times;</a>
+                <h2>Create Account</h2>
+                <form>
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </header>
     <div class="gallery-container">
         <!-- Thumbnail Column -->
         <div class="thumbnail-column">
